@@ -4,6 +4,7 @@ import ImageConverter from './contents/image_converter/ImageConverter';
 import JSONTools from './contents/json_tools/JSONTools';
 import TimestampConverter from './contents/timestamp/TimestampConverter';
 import Base64Tool from './contents/base64/Base64Tool';
+import URLTool from './contents/url/URLTool';
 
 function App() {
   const [activeMenu, setActiveMenu] = useState('image-format');
@@ -18,6 +19,8 @@ function App() {
         return <TimestampConverter />;
       case 'base64':
         return <Base64Tool />;
+      case 'url':
+        return <URLTool />;
       default:
         return <ImageConverter />;
     }
