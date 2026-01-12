@@ -1,32 +1,75 @@
 import React from 'react';
 import { menuItems } from './menuConfig';
+import { useTheme } from '../theme/ThemeContext';
 
 export default function Sidebar({ activeMenu, setActiveMenu }) {
+  const { colors, toggleTheme, isDark } = useTheme();
+
   return (
     <aside style={{
       width: '240px',
-      background: 'linear-gradient(180deg, #1a1a24 0%, #12121a 100%)',
-      borderRight: '1px solid rgba(255,255,255,0.06)',
+      background: colors.sidebarBg,
+      borderRight: `1px solid ${colors.border}`,
       padding: '20px 0',
       flexShrink: 0,
       position: 'relative',
+      transition: 'background 0.3s ease, border-color 0.3s ease',
     }}>
+      {/* 主题切换按钮 */}
+      <div style={{
+        padding: '0 20px 20px',
+        display: 'flex',
+        justifyContent: 'flex-end',
+      }}>
+        <button
+          onClick={toggleTheme}
+          title={isDark ? '切换到亮色主题' : '切换到暗色主题'}
+          style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '10px',
+            border: `1px solid ${colors.borderLight}`,
+            background: colors.cardBg,
+            color: colors.textSecondary,
+            cursor: 'pointer',
+            fontSize: '1.2rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = colors.cardBgHover;
+            e.currentTarget.style.borderColor = colors.primary;
+            e.currentTarget.style.color = colors.primary;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = colors.cardBg;
+            e.currentTarget.style.borderColor = colors.borderLight;
+            e.currentTarget.style.color = colors.textSecondary;
+          }}
+        >
+          {isDark ? '☀️' : '🌙'}
+        </button>
+      </div>
+
       <div style={{
         padding: '0 20px 30px',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        borderBottom: `1px solid ${colors.border}`,
         marginBottom: '20px',
       }}>
         <h1 style={{
-          color: '#fff',
+          color: colors.textPrimary,
           fontSize: '1.3rem',
           fontWeight: '600',
           margin: '0 0 16px 0',
           display: 'flex',
           alignItems: 'center',
           gap: '10px',
+          transition: 'color 0.3s ease',
         }}>
           <span style={{
-            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            background: colors.gradientPrimary,
             borderRadius: '8px',
             width: '32px',
             height: '32px',
@@ -38,19 +81,21 @@ export default function Sidebar({ activeMenu, setActiveMenu }) {
           工具箱
         </h1>
         <div style={{
-          background: 'rgba(99, 102, 241, 0.1)',
+          background: colors.primaryBg,
           borderRadius: '8px',
           padding: '10px 12px',
-          border: '1px solid rgba(99, 102, 241, 0.2)',
+          border: `1px solid ${colors.primaryBorder}`,
+          transition: 'all 0.3s ease',
         }}>
           <p style={{
-            color: 'rgba(255,255,255,0.7)',
+            color: colors.textSecondary,
             fontSize: '0.75rem',
             margin: 0,
             lineHeight: '1.5',
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
+            transition: 'color 0.3s ease',
           }}>
             <span>💡</span>
             <span>所有操作均在本地完成，文件不会上传到服务器</span>
@@ -78,15 +123,15 @@ export default function Sidebar({ activeMenu, setActiveMenu }) {
               fontWeight: '500',
               transition: 'all 0.2s ease',
               background: activeMenu === item.id
-                ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.1))'
+                ? colors.gradientPrimaryBg
                 : 'transparent',
               color: item.disabled
-                ? 'rgba(255,255,255,0.3)'
+                ? colors.textDisabled
                 : activeMenu === item.id
-                  ? '#a5b4fc'
-                  : 'rgba(255,255,255,0.7)',
+                  ? colors.primaryLight
+                  : colors.textSecondary,
               borderLeft: activeMenu === item.id
-                ? '3px solid #6366f1'
+                ? `3px solid ${colors.primary}`
                 : '3px solid transparent',
             }}
           >
@@ -96,10 +141,11 @@ export default function Sidebar({ activeMenu, setActiveMenu }) {
               <span style={{
                 marginLeft: 'auto',
                 fontSize: '0.7rem',
-                background: 'rgba(255,255,255,0.1)',
+                background: colors.primaryBg,
                 padding: '2px 6px',
                 borderRadius: '4px',
-                color: 'rgba(255,255,255,0.4)',
+                color: colors.textQuaternary,
+                transition: 'all 0.3s ease',
               }}>
                 即将推出
               </span>

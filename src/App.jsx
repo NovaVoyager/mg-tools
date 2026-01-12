@@ -5,9 +5,11 @@ import JSONTools from './contents/json_tools/JSONTools';
 import TimestampConverter from './contents/timestamp/TimestampConverter';
 import Base64Tool from './contents/base64/Base64Tool';
 import URLTool from './contents/url/URLTool';
+import { useTheme } from './theme/ThemeContext';
 
 function App() {
   const [activeMenu, setActiveMenu] = useState('image-format');
+  const { colors } = useTheme();
 
   const renderContent = () => {
     switch (activeMenu) {
@@ -30,8 +32,9 @@ function App() {
     <div style={{
       display: 'flex',
       minHeight: '100vh',
-      background: '#0f0f14',
+      background: colors.background,
       fontFamily: "'Segoe UI', system-ui, sans-serif",
+      transition: 'background 0.3s ease',
     }}>
       <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
       <main style={{

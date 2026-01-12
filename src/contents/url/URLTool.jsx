@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useTheme } from '../../theme/ThemeContext';
 
 export default function URLTool() {
+  const { colors } = useTheme();
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [mode, setMode] = useState('encode'); // 'encode' or 'decode'
@@ -78,17 +80,19 @@ export default function URLTool() {
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
       <header style={{ marginBottom: '40px' }}>
         <h2 style={{
-          color: '#fff',
+          color: colors.textPrimary,
           fontSize: '1.8rem',
           fontWeight: '600',
           margin: '0 0 8px 0',
+          transition: 'color 0.3s ease',
         }}>
           URL 编解码
         </h2>
         <p style={{
-          color: 'rgba(255,255,255,0.5)',
+          color: colors.textTertiary,
           fontSize: '1rem',
           margin: 0,
+          transition: 'color 0.3s ease',
         }}>
           支持 URL 参数的编码与解码，处理特殊字符转义
         </p>
@@ -109,14 +113,12 @@ export default function URLTool() {
           style={{
             padding: '12px 24px',
             borderRadius: '10px',
-            border: mode === 'encode' ? '2px solid #6366f1' : '2px solid rgba(255,255,255,0.1)',
+            border: mode === 'encode' ? `2px solid ${colors.primary}` : `2px solid ${colors.borderLight}`,
             cursor: 'pointer',
             fontSize: '0.95rem',
             fontWeight: '500',
-            background: mode === 'encode'
-              ? 'rgba(99, 102, 241, 0.15)'
-              : 'rgba(255,255,255,0.03)',
-            color: mode === 'encode' ? '#a5b4fc' : 'rgba(255,255,255,0.7)',
+            background: mode === 'encode' ? colors.primaryBg : colors.cardBg,
+            color: mode === 'encode' ? colors.primaryLight : colors.textSecondary,
             transition: 'all 0.2s ease',
           }}
         >
@@ -131,14 +133,12 @@ export default function URLTool() {
           style={{
             padding: '12px 24px',
             borderRadius: '10px',
-            border: mode === 'decode' ? '2px solid #6366f1' : '2px solid rgba(255,255,255,0.1)',
+            border: mode === 'decode' ? `2px solid ${colors.primary}` : `2px solid ${colors.borderLight}`,
             cursor: 'pointer',
             fontSize: '0.95rem',
             fontWeight: '500',
-            background: mode === 'decode'
-              ? 'rgba(99, 102, 241, 0.15)'
-              : 'rgba(255,255,255,0.03)',
-            color: mode === 'decode' ? '#a5b4fc' : 'rgba(255,255,255,0.7)',
+            background: mode === 'decode' ? colors.primaryBg : colors.cardBg,
+            color: mode === 'decode' ? colors.primaryLight : colors.textSecondary,
             transition: 'all 0.2s ease',
           }}
         >
@@ -156,10 +156,11 @@ export default function URLTool() {
       }}>
         {/* 输入区域 */}
         <div style={{
-          background: 'rgba(255,255,255,0.03)',
+          background: colors.cardBg,
           borderRadius: '16px',
           padding: '20px',
-          border: '1px solid rgba(255,255,255,0.06)',
+          border: `1px solid ${colors.border}`,
+          transition: 'all 0.3s ease',
         }}>
           <div style={{
             display: 'flex',
@@ -168,25 +169,27 @@ export default function URLTool() {
             marginBottom: '12px',
           }}>
             <h3 style={{
-              color: '#fff',
+              color: colors.textPrimary,
               margin: 0,
               fontSize: '1rem',
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
+              transition: 'color 0.3s ease',
             }}>
               <span style={{
                 width: '8px',
                 height: '8px',
-                background: '#f59e0b',
+                background: colors.warning,
                 borderRadius: '50%',
               }}></span>
               {mode === 'encode' ? '原始文本' : 'URL 编码字符串'}
             </h3>
             {inputText && (
               <span style={{
-                color: 'rgba(255,255,255,0.5)',
+                color: colors.textTertiary,
                 fontSize: '0.85rem',
+                transition: 'color 0.3s ease',
               }}>
                 {inputText.length} 字符
               </span>
@@ -202,15 +205,16 @@ export default function URLTool() {
             style={{
               width: '100%',
               minHeight: '300px',
-              background: 'rgba(0,0,0,0.3)',
-              border: 'none',
+              background: colors.inputBg,
+              border: `1px solid ${colors.border}`,
               borderRadius: '12px',
               padding: '16px',
-              color: '#fff',
+              color: colors.textPrimary,
               fontSize: '0.9rem',
               fontFamily: "'Consolas', 'Monaco', monospace",
               resize: 'vertical',
               lineHeight: '1.6',
+              transition: 'all 0.3s ease',
             }}
           />
         </div>
@@ -232,10 +236,8 @@ export default function URLTool() {
               borderRadius: '50%',
               border: 'none',
               cursor: outputText ? 'pointer' : 'not-allowed',
-              background: outputText
-                ? 'rgba(99, 102, 241, 0.2)'
-                : 'rgba(255,255,255,0.05)',
-              color: outputText ? '#a5b4fc' : 'rgba(255,255,255,0.3)',
+              background: outputText ? colors.primaryBg : colors.cardBg,
+              color: outputText ? colors.primaryLight : colors.textDisabled,
               fontSize: '1.2rem',
               transition: 'all 0.2s ease',
               display: 'flex',
@@ -249,10 +251,11 @@ export default function URLTool() {
 
         {/* 输出区域 */}
         <div style={{
-          background: 'rgba(255,255,255,0.03)',
+          background: colors.cardBg,
           borderRadius: '16px',
           padding: '20px',
-          border: '1px solid rgba(255,255,255,0.06)',
+          border: `1px solid ${colors.border}`,
+          transition: 'all 0.3s ease',
         }}>
           <div style={{
             display: 'flex',
@@ -261,24 +264,25 @@ export default function URLTool() {
             marginBottom: '12px',
           }}>
             <h3 style={{
-              color: '#fff',
+              color: colors.textPrimary,
               margin: 0,
               fontSize: '1rem',
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
+              transition: 'color 0.3s ease',
             }}>
               <span style={{
                 width: '8px',
                 height: '8px',
-                background: outputText ? '#10b981' : 'rgba(255,255,255,0.3)',
+                background: outputText ? colors.success : colors.textDisabled,
                 borderRadius: '50%',
               }}></span>
               {mode === 'encode' ? 'URL 编码结果' : '解码结果'}
             </h3>
             {outputText && (
               <span style={{
-                color: '#10b981',
+                color: colors.success,
                 fontSize: '0.85rem',
                 fontWeight: '500',
               }}>
@@ -289,16 +293,18 @@ export default function URLTool() {
           <div style={{
             width: '100%',
             minHeight: '300px',
-            background: 'rgba(0,0,0,0.3)',
+            background: colors.inputBg,
+            border: `1px solid ${colors.border}`,
             borderRadius: '12px',
             padding: '16px',
-            color: outputText ? '#fff' : 'rgba(255,255,255,0.3)',
+            color: outputText ? colors.textPrimary : colors.textDisabled,
             fontSize: '0.9rem',
             fontFamily: "'Consolas', 'Monaco', monospace",
             lineHeight: '1.6',
             wordBreak: 'break-all',
             whiteSpace: 'pre-wrap',
             overflowY: 'auto',
+            transition: 'all 0.3s ease',
           }}>
             {outputText || '转换结果将显示在这里...'}
           </div>
@@ -308,16 +314,17 @@ export default function URLTool() {
       {/* 错误提示 */}
       {error && (
         <div style={{
-          background: 'rgba(239, 68, 68, 0.1)',
-          border: '1px solid rgba(239, 68, 68, 0.3)',
+          background: colors.errorBg,
+          border: `1px solid ${colors.errorBorder}`,
           borderRadius: '12px',
           padding: '12px 16px',
           marginBottom: '24px',
-          color: '#fca5a5',
+          color: colors.errorText,
           fontSize: '0.9rem',
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
+          transition: 'all 0.3s ease',
         }}>
           <span>⚠️</span>
           <span>{error}</span>
@@ -339,7 +346,7 @@ export default function URLTool() {
             cursor: 'pointer',
             fontSize: '0.95rem',
             fontWeight: '600',
-            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            background: colors.gradientPrimary,
             color: '#fff',
             transition: 'all 0.2s ease',
           }}
@@ -357,7 +364,7 @@ export default function URLTool() {
               cursor: 'pointer',
               fontSize: '0.95rem',
               fontWeight: '600',
-              background: 'linear-gradient(135deg, #10b981, #059669)',
+              background: colors.gradientSuccess,
               color: '#fff',
               transition: 'all 0.2s ease',
             }}
@@ -371,12 +378,12 @@ export default function URLTool() {
           style={{
             padding: '14px 24px',
             borderRadius: '10px',
-            border: '1px solid rgba(255,255,255,0.15)',
+            border: `1px solid ${colors.borderLight}`,
             cursor: 'pointer',
             fontSize: '0.95rem',
             fontWeight: '500',
             background: 'transparent',
-            color: 'rgba(255,255,255,0.7)',
+            color: colors.textSecondary,
             transition: 'all 0.2s ease',
           }}
         >
@@ -387,25 +394,28 @@ export default function URLTool() {
       {/* 使用说明 */}
       <div style={{
         marginTop: '30px',
-        background: 'rgba(99, 102, 241, 0.1)',
+        background: colors.primaryBg,
         borderRadius: '12px',
         padding: '20px',
-        border: '1px solid rgba(99, 102, 241, 0.2)',
+        border: `1px solid ${colors.primaryBorder}`,
+        transition: 'all 0.3s ease',
       }}>
         <h3 style={{
-          color: '#a5b4fc',
+          color: colors.primaryLight,
           fontSize: '1rem',
           fontWeight: '600',
           margin: '0 0 12px 0',
+          transition: 'color 0.3s ease',
         }}>
           使用说明
         </h3>
         <ul style={{
-          color: 'rgba(255,255,255,0.6)',
+          color: colors.textSecondary,
           fontSize: '0.85rem',
           lineHeight: '1.8',
           margin: 0,
           paddingLeft: '20px',
+          transition: 'color 0.3s ease',
         }}>
           <li>URL 编码：将文本中的特殊字符转换为 %XX 格式，适用于 URL 参数传递</li>
           <li>URL 解码：将 %XX 格式的编码还原为原始文本</li>

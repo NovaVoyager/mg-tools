@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { useTheme } from '../../theme/ThemeContext';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -18,6 +19,7 @@ const timeFormats = [
 ];
 
 export default function TimestampConverter() {
+  const { colors } = useTheme();
   const [currentTime, setCurrentTime] = useState(dayjs());
   const [timestampInput, setTimestampInput] = useState('');
   const [timestampType, setTimestampType] = useState('auto'); // 'auto', 'seconds', 'milliseconds'
@@ -151,17 +153,19 @@ export default function TimestampConverter() {
     <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
       <header style={{ marginBottom: '30px' }}>
         <h2 style={{
-          color: '#fff',
+          color: colors.textPrimary,
           fontSize: '1.8rem',
           fontWeight: '600',
           margin: '0 0 8px 0',
+          transition: 'color 0.3s ease',
         }}>
           时间戳转换工具
         </h2>
         <p style={{
-          color: 'rgba(255,255,255,0.5)',
+          color: colors.textTertiary,
           fontSize: '1rem',
           margin: 0,
+          transition: 'color 0.3s ease',
         }}>
           时间戳与日期时间相互转换，支持秒级和毫秒级时间戳
         </p>
@@ -169,17 +173,19 @@ export default function TimestampConverter() {
 
       {/* 当前时间 */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.1))',
+        background: colors.gradientPrimaryBg,
         borderRadius: '16px',
         padding: '24px',
-        border: '1px solid rgba(99, 102, 241, 0.3)',
+        border: `1px solid ${colors.primaryBorder}`,
         marginBottom: '30px',
+        transition: 'all 0.3s ease',
       }}>
         <h3 style={{
-          color: '#a5b4fc',
+          color: colors.primaryLight,
           fontSize: '1rem',
           fontWeight: '600',
           margin: '0 0 16px 0',
+          transition: 'color 0.3s ease',
         }}>
           ⏰ 当前时间
         </h3>
@@ -189,40 +195,47 @@ export default function TimestampConverter() {
           gap: '16px',
         }}>
           <div style={{
-            background: 'rgba(0,0,0,0.3)',
+            background: colors.inputBg,
+            border: `1px solid ${colors.border}`,
             borderRadius: '12px',
             padding: '16px',
+            transition: 'all 0.3s ease',
           }}>
             <div style={{
-              color: 'rgba(255,255,255,0.6)',
+              color: colors.textSecondary,
               fontSize: '0.8rem',
               marginBottom: '6px',
+              transition: 'color 0.3s ease',
             }}>
               日期时间
             </div>
             <div style={{
-              color: '#fff',
+              color: colors.textPrimary,
               fontSize: '1.1rem',
               fontWeight: '600',
               fontFamily: 'monospace',
+              transition: 'color 0.3s ease',
             }}>
               {currentTime.format('YYYY-MM-DD HH:mm:ss')}
             </div>
           </div>
           <div style={{
-            background: 'rgba(0,0,0,0.3)',
+            background: colors.inputBg,
+            border: `1px solid ${colors.border}`,
             borderRadius: '12px',
             padding: '16px',
+            transition: 'all 0.3s ease',
           }}>
             <div style={{
-              color: 'rgba(255,255,255,0.6)',
+              color: colors.textSecondary,
               fontSize: '0.8rem',
               marginBottom: '6px',
+              transition: 'color 0.3s ease',
             }}>
               时间戳（秒）
             </div>
             <div style={{
-              color: '#10b981',
+              color: colors.success,
               fontSize: '1.1rem',
               fontWeight: '600',
               fontFamily: 'monospace',
@@ -235,19 +248,22 @@ export default function TimestampConverter() {
             </div>
           </div>
           <div style={{
-            background: 'rgba(0,0,0,0.3)',
+            background: colors.inputBg,
+            border: `1px solid ${colors.border}`,
             borderRadius: '12px',
             padding: '16px',
+            transition: 'all 0.3s ease',
           }}>
             <div style={{
-              color: 'rgba(255,255,255,0.6)',
+              color: colors.textSecondary,
               fontSize: '0.8rem',
               marginBottom: '6px',
+              transition: 'color 0.3s ease',
             }}>
               时间戳（毫秒）
             </div>
             <div style={{
-              color: '#10b981',
+              color: colors.success,
               fontSize: '1.1rem',
               fontWeight: '600',
               fontFamily: 'monospace',
@@ -264,27 +280,30 @@ export default function TimestampConverter() {
 
       {/* 时间戳转时间 */}
       <div style={{
-        background: 'rgba(255,255,255,0.03)',
+        background: colors.cardBg,
         borderRadius: '16px',
         padding: '24px',
-        border: '1px solid rgba(255,255,255,0.06)',
+        border: `1px solid ${colors.border}`,
         marginBottom: '30px',
+        transition: 'all 0.3s ease',
       }}>
         <h3 style={{
-          color: '#fff',
+          color: colors.textPrimary,
           fontSize: '1rem',
           fontWeight: '600',
           margin: '0 0 16px 0',
+          transition: 'color 0.3s ease',
         }}>
           ⏩ 时间戳转时间
         </h3>
 
         <div style={{ marginBottom: '16px' }}>
           <label style={{
-            color: 'rgba(255,255,255,0.7)',
+            color: colors.textSecondary,
             display: 'block',
             marginBottom: '8px',
             fontSize: '0.9rem',
+            transition: 'color 0.3s ease',
           }}>
             时间戳类型
           </label>
@@ -301,15 +320,15 @@ export default function TimestampConverter() {
                   padding: '8px 16px',
                   borderRadius: '8px',
                   border: timestampType === type.value
-                    ? '2px solid #6366f1'
-                    : '1px solid rgba(255,255,255,0.15)',
+                    ? `2px solid ${colors.primary}`
+                    : `1px solid ${colors.borderLight}`,
                   cursor: 'pointer',
                   fontSize: '0.85rem',
                   fontWeight: '500',
                   background: timestampType === type.value
-                    ? 'rgba(99, 102, 241, 0.15)'
-                    : 'rgba(255,255,255,0.03)',
-                  color: timestampType === type.value ? '#a5b4fc' : 'rgba(255,255,255,0.7)',
+                    ? colors.primaryBg
+                    : colors.cardBg,
+                  color: timestampType === type.value ? colors.primaryLight : colors.textSecondary,
                   transition: 'all 0.2s ease',
                 }}
               >
@@ -321,10 +340,11 @@ export default function TimestampConverter() {
 
         <div style={{ marginBottom: '16px' }}>
           <label style={{
-            color: 'rgba(255,255,255,0.7)',
+            color: colors.textSecondary,
             display: 'block',
             marginBottom: '8px',
             fontSize: '0.9rem',
+            transition: 'color 0.3s ease',
           }}>
             输入时间戳
           </label>
@@ -338,11 +358,12 @@ export default function TimestampConverter() {
                 flex: 1,
                 padding: '12px',
                 borderRadius: '8px',
-                border: '1px solid rgba(255,255,255,0.15)',
-                background: 'rgba(0,0,0,0.3)',
-                color: '#fff',
+                border: `1px solid ${colors.borderLight}`,
+                background: colors.inputBg,
+                color: colors.textPrimary,
                 fontSize: '0.9rem',
                 fontFamily: 'monospace',
+                transition: 'all 0.3s ease',
               }}
             />
             <button
@@ -354,7 +375,7 @@ export default function TimestampConverter() {
                 cursor: 'pointer',
                 fontSize: '0.9rem',
                 fontWeight: '600',
-                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                background: colors.gradientPrimary,
                 color: '#fff',
                 transition: 'all 0.2s ease',
                 whiteSpace: 'nowrap',
@@ -367,10 +388,11 @@ export default function TimestampConverter() {
 
         <div style={{ marginBottom: '16px' }}>
           <label style={{
-            color: 'rgba(255,255,255,0.7)',
+            color: colors.textSecondary,
             display: 'block',
             marginBottom: '8px',
             fontSize: '0.9rem',
+            transition: 'color 0.3s ease',
           }}>
             时间格式
           </label>
@@ -381,11 +403,12 @@ export default function TimestampConverter() {
               width: '100%',
               padding: '12px',
               borderRadius: '8px',
-              border: '1px solid rgba(255,255,255,0.15)',
-              background: 'rgba(0,0,0,0.3)',
-              color: '#fff',
+              border: `1px solid ${colors.borderLight}`,
+              background: colors.inputBg,
+              color: colors.textPrimary,
               fontSize: '0.9rem',
               cursor: 'pointer',
+              transition: 'all 0.3s ease',
             }}
           >
             {timeFormats.map((format) => (
@@ -398,15 +421,17 @@ export default function TimestampConverter() {
 
         {convertedTime && (
           <div style={{
-            background: 'rgba(16, 185, 129, 0.1)',
+            background: colors.successBg,
             borderRadius: '12px',
             padding: '16px',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
+            border: `1px solid ${colors.successBorder}`,
+            transition: 'all 0.3s ease',
           }}>
             <div style={{
-              color: 'rgba(255,255,255,0.6)',
+              color: colors.textSecondary,
               fontSize: '0.8rem',
               marginBottom: '6px',
+              transition: 'color 0.3s ease',
             }}>
               转换结果
             </div>
@@ -417,7 +442,7 @@ export default function TimestampConverter() {
               gap: '12px',
             }}>
               <div style={{
-                color: '#10b981',
+                color: colors.success,
                 fontSize: '1.1rem',
                 fontWeight: '600',
                 fontFamily: 'monospace',
@@ -429,12 +454,12 @@ export default function TimestampConverter() {
                 style={{
                   padding: '8px 16px',
                   borderRadius: '6px',
-                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  border: `1px solid ${colors.successBorder}`,
                   cursor: 'pointer',
                   fontSize: '0.85rem',
                   fontWeight: '500',
-                  background: 'rgba(16, 185, 129, 0.1)',
-                  color: '#10b981',
+                  background: colors.successBg,
+                  color: colors.success,
                   transition: 'all 0.2s ease',
                   whiteSpace: 'nowrap',
                 }}
@@ -448,26 +473,29 @@ export default function TimestampConverter() {
 
       {/* 时间转时间戳 */}
       <div style={{
-        background: 'rgba(255,255,255,0.03)',
+        background: colors.cardBg,
         borderRadius: '16px',
         padding: '24px',
-        border: '1px solid rgba(255,255,255,0.06)',
+        border: `1px solid ${colors.border}`,
+        transition: 'all 0.3s ease',
       }}>
         <h3 style={{
-          color: '#fff',
+          color: colors.textPrimary,
           fontSize: '1rem',
           fontWeight: '600',
           margin: '0 0 16px 0',
+          transition: 'color 0.3s ease',
         }}>
           ⏪ 时间转时间戳
         </h3>
 
         <div style={{ marginBottom: '16px' }}>
           <label style={{
-            color: 'rgba(255,255,255,0.7)',
+            color: colors.textSecondary,
             display: 'block',
             marginBottom: '8px',
             fontSize: '0.9rem',
+            transition: 'color 0.3s ease',
           }}>
             输入日期时间
           </label>
@@ -481,11 +509,12 @@ export default function TimestampConverter() {
                 flex: 1,
                 padding: '12px',
                 borderRadius: '8px',
-                border: '1px solid rgba(255,255,255,0.15)',
-                background: 'rgba(0,0,0,0.3)',
-                color: '#fff',
+                border: `1px solid ${colors.borderLight}`,
+                background: colors.inputBg,
+                color: colors.textPrimary,
                 fontSize: '0.9rem',
                 fontFamily: 'monospace',
+                transition: 'all 0.3s ease',
               }}
             />
             <button
@@ -497,7 +526,7 @@ export default function TimestampConverter() {
                 cursor: 'pointer',
                 fontSize: '0.9rem',
                 fontWeight: '600',
-                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                background: colors.gradientPrimary,
                 color: '#fff',
                 transition: 'all 0.2s ease',
                 whiteSpace: 'nowrap',
@@ -507,9 +536,10 @@ export default function TimestampConverter() {
             </button>
           </div>
           <div style={{
-            color: 'rgba(255,255,255,0.4)',
+            color: colors.textQuaternary,
             fontSize: '0.75rem',
             marginTop: '6px',
+            transition: 'color 0.3s ease',
           }}>
             支持多种格式输入，如：2024-01-12 14:30:45、2024/01/12 14:30:45 等
           </div>
@@ -522,15 +552,17 @@ export default function TimestampConverter() {
             gap: '16px',
           }}>
             <div style={{
-              background: 'rgba(16, 185, 129, 0.1)',
+              background: colors.successBg,
               borderRadius: '12px',
               padding: '16px',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
+              border: `1px solid ${colors.successBorder}`,
+              transition: 'all 0.3s ease',
             }}>
               <div style={{
-                color: 'rgba(255,255,255,0.6)',
+                color: colors.textSecondary,
                 fontSize: '0.8rem',
                 marginBottom: '6px',
+                transition: 'color 0.3s ease',
               }}>
                 时间戳（秒）
               </div>
@@ -541,7 +573,7 @@ export default function TimestampConverter() {
                 gap: '12px',
               }}>
                 <div style={{
-                  color: '#10b981',
+                  color: colors.success,
                   fontSize: '1.1rem',
                   fontWeight: '600',
                   fontFamily: 'monospace',
@@ -554,12 +586,12 @@ export default function TimestampConverter() {
                   style={{
                     padding: '8px 16px',
                     borderRadius: '6px',
-                    border: '1px solid rgba(16, 185, 129, 0.3)',
+                    border: `1px solid ${colors.successBorder}`,
                     cursor: 'pointer',
                     fontSize: '0.85rem',
                     fontWeight: '500',
-                    background: 'rgba(16, 185, 129, 0.1)',
-                    color: '#10b981',
+                    background: colors.successBg,
+                    color: colors.success,
                     transition: 'all 0.2s ease',
                     whiteSpace: 'nowrap',
                   }}
@@ -569,15 +601,17 @@ export default function TimestampConverter() {
               </div>
             </div>
             <div style={{
-              background: 'rgba(16, 185, 129, 0.1)',
+              background: colors.successBg,
               borderRadius: '12px',
               padding: '16px',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
+              border: `1px solid ${colors.successBorder}`,
+              transition: 'all 0.3s ease',
             }}>
               <div style={{
-                color: 'rgba(255,255,255,0.6)',
+                color: colors.textSecondary,
                 fontSize: '0.8rem',
                 marginBottom: '6px',
+                transition: 'color 0.3s ease',
               }}>
                 时间戳（毫秒）
               </div>
@@ -588,7 +622,7 @@ export default function TimestampConverter() {
                 gap: '12px',
               }}>
                 <div style={{
-                  color: '#10b981',
+                  color: colors.success,
                   fontSize: '1.1rem',
                   fontWeight: '600',
                   fontFamily: 'monospace',
@@ -601,12 +635,12 @@ export default function TimestampConverter() {
                   style={{
                     padding: '8px 16px',
                     borderRadius: '6px',
-                    border: '1px solid rgba(16, 185, 129, 0.3)',
+                    border: `1px solid ${colors.successBorder}`,
                     cursor: 'pointer',
                     fontSize: '0.85rem',
                     fontWeight: '500',
-                    background: 'rgba(16, 185, 129, 0.1)',
-                    color: '#10b981',
+                    background: colors.successBg,
+                    color: colors.success,
                     transition: 'all 0.2s ease',
                     whiteSpace: 'nowrap',
                   }}
@@ -622,25 +656,28 @@ export default function TimestampConverter() {
       {/* 功能说明 */}
       <div style={{
         marginTop: '30px',
-        background: 'rgba(99, 102, 241, 0.1)',
+        background: colors.primaryBg,
         borderRadius: '12px',
         padding: '20px',
-        border: '1px solid rgba(99, 102, 241, 0.2)',
+        border: `1px solid ${colors.primaryBorder}`,
+        transition: 'all 0.3s ease',
       }}>
         <h3 style={{
-          color: '#a5b4fc',
+          color: colors.primaryLight,
           fontSize: '1rem',
           fontWeight: '600',
           margin: '0 0 12px 0',
+          transition: 'color 0.3s ease',
         }}>
           使用说明
         </h3>
         <ul style={{
-          color: 'rgba(255,255,255,0.6)',
+          color: colors.textSecondary,
           fontSize: '0.85rem',
           lineHeight: '1.8',
           margin: 0,
           paddingLeft: '20px',
+          transition: 'color 0.3s ease',
         }}>
           <li>当前时间：实时显示当前日期时间和时间戳，点击时间戳可直接复制</li>
           <li>时间戳转时间：支持秒级（10位）和毫秒级（13位）时间戳输入，自动识别或手动选择</li>

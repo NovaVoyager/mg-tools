@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
+import { useTheme } from '../../theme/ThemeContext';
 
 const formats = [
   { value: 'image/png', label: 'PNG', ext: 'png', desc: '无损压缩，支持透明' },
@@ -7,6 +8,7 @@ const formats = [
 ];
 
 export default function ImageConverter() {
+  const { colors } = useTheme();
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [outputFormat, setOutputFormat] = useState('image/png');
@@ -135,17 +137,19 @@ export default function ImageConverter() {
     <div style={{ maxWidth: '900px', margin: '0 auto' }}>
       <header style={{ marginBottom: '40px' }}>
         <h2 style={{
-          color: '#fff',
+          color: colors.textPrimary,
           fontSize: '1.8rem',
           fontWeight: '600',
           margin: '0 0 8px 0',
+          transition: 'color 0.3s ease',
         }}>
           图片格式转换
         </h2>
         <p style={{
-          color: 'rgba(255,255,255,0.5)',
+          color: colors.textTertiary,
           fontSize: '1rem',
           margin: 0,
+          transition: 'color 0.3s ease',
         }}>
           支持 PNG, JPEG, WebP, GIF, BMP, AVIF 格式互转，可调节压缩质量
         </p>
@@ -158,14 +162,12 @@ export default function ImageConverter() {
         onDragLeave={handleDragLeave}
         onClick={() => fileInputRef.current?.click()}
         style={{
-          border: `2px dashed ${isDragging ? '#6366f1' : 'rgba(255,255,255,0.15)'}`,
+          border: `2px dashed ${isDragging ? colors.primary : colors.borderLight}`,
           borderRadius: '16px',
           padding: '50px 30px',
           textAlign: 'center',
           cursor: 'pointer',
-          background: isDragging
-            ? 'rgba(99, 102, 241, 0.08)'
-            : 'rgba(255,255,255,0.02)',
+          background: isDragging ? colors.primaryBg : colors.cardBg,
           transition: 'all 0.3s ease',
           marginBottom: '30px',
         }}
@@ -181,19 +183,30 @@ export default function ImageConverter() {
           width: '64px',
           height: '64px',
           margin: '0 auto 20px',
-          background: 'rgba(99, 102, 241, 0.1)',
+          background: colors.primaryBg,
           borderRadius: '16px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           fontSize: '1.8rem',
+          transition: 'background 0.3s ease',
         }}>
           📁
         </div>
-        <p style={{ color: '#fff', fontSize: '1.1rem', margin: '0 0 8px 0' }}>
+        <p style={{
+          color: colors.textPrimary,
+          fontSize: '1.1rem',
+          margin: '0 0 8px 0',
+          transition: 'color 0.3s ease',
+        }}>
           拖放图片到这里，或点击选择文件
         </p>
-        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem', margin: 0 }}>
+        <p style={{
+          color: colors.textQuaternary,
+          fontSize: '0.9rem',
+          margin: 0,
+          transition: 'color 0.3s ease',
+        }}>
           支持 PNG, JPEG, WebP, GIF, BMP, AVIF 等格式
         </p>
       </div>
@@ -208,10 +221,11 @@ export default function ImageConverter() {
         }}>
           {/* 原图 */}
           <div style={{
-            background: 'rgba(255,255,255,0.03)',
+            background: colors.cardBg,
             borderRadius: '16px',
             padding: '20px',
-            border: '1px solid rgba(255,255,255,0.06)',
+            border: `1px solid ${colors.border}`,
+            transition: 'all 0.3s ease',
           }}>
             <div style={{
               display: 'flex',
@@ -220,38 +234,42 @@ export default function ImageConverter() {
               marginBottom: '16px',
             }}>
               <h3 style={{
-                color: '#fff',
+                color: colors.textPrimary,
                 margin: 0,
                 fontSize: '1rem',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
+                transition: 'color 0.3s ease',
               }}>
                 <span style={{
                   width: '8px',
                   height: '8px',
-                  background: '#f59e0b',
+                  background: colors.warning,
                   borderRadius: '50%',
                 }}></span>
                 原始图片
               </h3>
               {originalInfo && (
                 <span style={{
-                  color: 'rgba(255,255,255,0.5)',
+                  color: colors.textTertiary,
                   fontSize: '0.85rem',
+                  transition: 'color 0.3s ease',
                 }}>
                   {originalInfo.size}
                 </span>
               )}
             </div>
             <div style={{
-              background: 'rgba(0,0,0,0.3)',
+              background: colors.inputBg,
+              border: `1px solid ${colors.border}`,
               borderRadius: '12px',
               padding: '16px',
               minHeight: '200px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              transition: 'all 0.3s ease',
             }}>
               <img
                 src={preview}
@@ -268,14 +286,17 @@ export default function ImageConverter() {
               <div style={{
                 marginTop: '12px',
                 padding: '12px',
-                background: 'rgba(0,0,0,0.2)',
+                background: colors.inputBg,
+                border: `1px solid ${colors.border}`,
                 borderRadius: '8px',
+                transition: 'all 0.3s ease',
               }}>
                 <p style={{
-                  color: 'rgba(255,255,255,0.6)',
+                  color: colors.textSecondary,
                   fontSize: '0.8rem',
                   margin: 0,
                   wordBreak: 'break-all',
+                  transition: 'color 0.3s ease',
                 }}>
                   {originalInfo.name} • {originalInfo.type}
                 </p>
@@ -285,10 +306,11 @@ export default function ImageConverter() {
 
           {/* 转换后 */}
           <div style={{
-            background: 'rgba(255,255,255,0.03)',
+            background: colors.cardBg,
             borderRadius: '16px',
             padding: '20px',
-            border: '1px solid rgba(255,255,255,0.06)',
+            border: `1px solid ${colors.border}`,
+            transition: 'all 0.3s ease',
           }}>
             <div style={{
               display: 'flex',
@@ -297,24 +319,25 @@ export default function ImageConverter() {
               marginBottom: '16px',
             }}>
               <h3 style={{
-                color: '#fff',
+                color: colors.textPrimary,
                 margin: 0,
                 fontSize: '1rem',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
+                transition: 'color 0.3s ease',
               }}>
                 <span style={{
                   width: '8px',
                   height: '8px',
-                  background: convertedPreview ? '#10b981' : 'rgba(255,255,255,0.3)',
+                  background: convertedPreview ? colors.success : colors.textDisabled,
                   borderRadius: '50%',
                 }}></span>
                 转换结果
               </h3>
               {convertedSize && (
                 <span style={{
-                  color: '#10b981',
+                  color: colors.success,
                   fontSize: '0.85rem',
                   fontWeight: '500',
                 }}>
@@ -323,13 +346,15 @@ export default function ImageConverter() {
               )}
             </div>
             <div style={{
-              background: 'rgba(0,0,0,0.3)',
+              background: colors.inputBg,
+              border: `1px solid ${colors.border}`,
               borderRadius: '12px',
               padding: '16px',
               minHeight: '200px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              transition: 'all 0.3s ease',
             }}>
               {convertedPreview ? (
                 <img
@@ -345,7 +370,8 @@ export default function ImageConverter() {
               ) : (
                 <div style={{
                   textAlign: 'center',
-                  color: 'rgba(255,255,255,0.3)',
+                  color: colors.textDisabled,
+                  transition: 'color 0.3s ease',
                 }}>
                   <div style={{ fontSize: '2rem', marginBottom: '10px' }}>🎯</div>
                   <p style={{ margin: 0, fontSize: '0.9rem' }}>
@@ -358,12 +384,13 @@ export default function ImageConverter() {
               <div style={{
                 marginTop: '12px',
                 padding: '12px',
-                background: 'rgba(16, 185, 129, 0.1)',
+                background: colors.successBg,
                 borderRadius: '8px',
-                border: '1px solid rgba(16, 185, 129, 0.2)',
+                border: `1px solid ${colors.successBorder}`,
+                transition: 'all 0.3s ease',
               }}>
                 <p style={{
-                  color: '#10b981',
+                  color: colors.success,
                   fontSize: '0.8rem',
                   margin: 0,
                 }}>
@@ -378,16 +405,18 @@ export default function ImageConverter() {
       {/* 转换选项 */}
       {image && (
         <div style={{
-          background: 'rgba(255,255,255,0.03)',
+          background: colors.cardBg,
           borderRadius: '16px',
           padding: '24px',
-          border: '1px solid rgba(255,255,255,0.06)',
+          border: `1px solid ${colors.border}`,
+          transition: 'all 0.3s ease',
         }}>
           <h3 style={{
-            color: '#fff',
+            color: colors.textPrimary,
             margin: '0 0 20px 0',
             fontSize: '1rem',
             fontWeight: '600',
+            transition: 'color 0.3s ease',
           }}>
             转换设置
           </h3>
@@ -395,10 +424,11 @@ export default function ImageConverter() {
           {/* 格式选择 */}
           <div style={{ marginBottom: '24px' }}>
             <label style={{
-              color: 'rgba(255,255,255,0.7)',
+              color: colors.textSecondary,
               display: 'block',
               marginBottom: '12px',
               fontSize: '0.9rem',
+              transition: 'color 0.3s ease',
             }}>
               输出格式
             </label>
@@ -416,15 +446,15 @@ export default function ImageConverter() {
                     padding: '14px 20px',
                     borderRadius: '12px',
                     border: outputFormat === format.value
-                      ? '2px solid #6366f1'
-                      : '2px solid rgba(255,255,255,0.1)',
+                      ? `2px solid ${colors.primary}`
+                      : `2px solid ${colors.borderLight}`,
                     cursor: 'pointer',
                     fontSize: '0.95rem',
                     fontWeight: '500',
                     background: outputFormat === format.value
-                      ? 'rgba(99, 102, 241, 0.15)'
-                      : 'rgba(255,255,255,0.03)',
-                    color: outputFormat === format.value ? '#a5b4fc' : 'rgba(255,255,255,0.7)',
+                      ? colors.primaryBg
+                      : colors.cardBg,
+                    color: outputFormat === format.value ? colors.primaryLight : colors.textSecondary,
                     transition: 'all 0.2s ease',
                     textAlign: 'left',
                     minWidth: '140px',
@@ -433,8 +463,9 @@ export default function ImageConverter() {
                   <div style={{ fontWeight: '600', marginBottom: '4px' }}>{format.label}</div>
                   <div style={{
                     fontSize: '0.75rem',
-                    color: 'rgba(255,255,255,0.4)',
+                    color: colors.textQuaternary,
                     fontWeight: '400',
+                    transition: 'color 0.3s ease',
                   }}>
                     {format.desc}
                   </div>
@@ -453,13 +484,14 @@ export default function ImageConverter() {
                 marginBottom: '12px',
               }}>
                 <label style={{
-                  color: 'rgba(255,255,255,0.7)',
+                  color: colors.textSecondary,
                   fontSize: '0.9rem',
+                  transition: 'color 0.3s ease',
                 }}>
                   压缩质量
                 </label>
                 <span style={{
-                  color: '#6366f1',
+                  color: colors.primary,
                   fontSize: '0.95rem',
                   fontWeight: '600',
                 }}>
@@ -484,7 +516,7 @@ export default function ImageConverter() {
                   borderRadius: '3px',
                   cursor: 'pointer',
                   appearance: 'none',
-                  background: `linear-gradient(to right, #6366f1 ${quality * 100}%, rgba(255,255,255,0.1) ${quality * 100}%)`,
+                  background: `linear-gradient(to right, ${colors.primary} ${quality * 100}%, ${colors.borderLight} ${quality * 100}%)`,
                 }}
               />
               <div style={{
@@ -492,7 +524,8 @@ export default function ImageConverter() {
                 justifyContent: 'space-between',
                 marginTop: '8px',
                 fontSize: '0.75rem',
-                color: 'rgba(255,255,255,0.4)',
+                color: colors.textQuaternary,
+                transition: 'color 0.3s ease',
               }}>
                 <span>体积更小</span>
                 <span>质量更高</span>
@@ -517,7 +550,7 @@ export default function ImageConverter() {
                 cursor: isConverting ? 'not-allowed' : 'pointer',
                 fontSize: '0.95rem',
                 fontWeight: '600',
-                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                background: colors.gradientPrimary,
                 color: '#fff',
                 transition: 'all 0.2s ease',
                 opacity: isConverting ? 0.7 : 1,
@@ -553,7 +586,7 @@ export default function ImageConverter() {
                   cursor: 'pointer',
                   fontSize: '0.95rem',
                   fontWeight: '600',
-                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  background: colors.gradientSuccess,
                   color: '#fff',
                   transition: 'all 0.2s ease',
                   display: 'flex',
@@ -570,12 +603,12 @@ export default function ImageConverter() {
               style={{
                 padding: '14px 24px',
                 borderRadius: '10px',
-                border: '1px solid rgba(255,255,255,0.15)',
+                border: `1px solid ${colors.borderLight}`,
                 cursor: 'pointer',
                 fontSize: '0.95rem',
                 fontWeight: '500',
                 background: 'transparent',
-                color: 'rgba(255,255,255,0.7)',
+                color: colors.textSecondary,
                 transition: 'all 0.2s ease',
               }}
             >

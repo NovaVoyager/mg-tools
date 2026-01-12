@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { JSONEditor as VanillaJSONEditor } from 'vanilla-jsoneditor';
 import ReactJson from 'react-json-view';
 import 'vanilla-jsoneditor/themes/jse-theme-dark.css';
+import { useTheme } from '../../theme/ThemeContext';
 
 export default function JSONTools() {
+  const { colors, isDark } = useTheme();
   const [viewMode, setViewMode] = useState('editor'); // 'editor' or 'viewer'
   const [jsonData, setJsonData] = useState({
     message: '欢迎使用 JSON 工具',
