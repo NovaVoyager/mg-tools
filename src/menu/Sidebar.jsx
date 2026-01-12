@@ -20,7 +20,7 @@ export default function Sidebar({ activeMenu, setActiveMenu }) {
           color: '#fff',
           fontSize: '1.3rem',
           fontWeight: '600',
-          margin: 0,
+          margin: '0 0 16px 0',
           display: 'flex',
           alignItems: 'center',
           gap: '10px',
@@ -37,6 +37,25 @@ export default function Sidebar({ activeMenu, setActiveMenu }) {
           }}>⚡</span>
           工具箱
         </h1>
+        <div style={{
+          background: 'rgba(99, 102, 241, 0.1)',
+          borderRadius: '8px',
+          padding: '10px 12px',
+          border: '1px solid rgba(99, 102, 241, 0.2)',
+        }}>
+          <p style={{
+            color: 'rgba(255,255,255,0.7)',
+            fontSize: '0.75rem',
+            margin: 0,
+            lineHeight: '1.5',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+          }}>
+            <span>💡</span>
+            <span>所有操作均在本地完成，文件不会上传到服务器</span>
+          </p>
+        </div>
       </div>
 
       <nav style={{ padding: '0 12px' }}>
@@ -88,31 +107,6 @@ export default function Sidebar({ activeMenu, setActiveMenu }) {
           </button>
         ))}
       </nav>
-
-      <div style={{
-        position: 'absolute',
-        bottom: '20px',
-        left: '0',
-        width: '240px',
-        padding: '0 20px',
-        boxSizing: 'border-box',
-      }}>
-        <div style={{
-          background: 'rgba(99, 102, 241, 0.1)',
-          borderRadius: '12px',
-          padding: '16px',
-          border: '1px solid rgba(99, 102, 241, 0.2)',
-        }}>
-          <p style={{
-            color: 'rgba(255,255,255,0.6)',
-            fontSize: '0.8rem',
-            margin: 0,
-            lineHeight: '1.5',
-          }}>
-            💡 所有操作均在本地完成，文件不会上传到服务器
-          </p>
-        </div>
-      </div>
     </aside>
   );
 }
