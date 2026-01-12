@@ -2,11 +2,11 @@ import React, { useState, useRef, useCallback } from 'react';
 
 const menuItems = [
   { id: 'image-format', icon: '🖼️', label: '图片格式转换', active: true },
-  { id: 'image-compress', icon: '📦', label: '图片压缩', disabled: true },
-  { id: 'image-resize', icon: '📐', label: '图片裁剪', disabled: true },
-  { id: 'image-watermark', icon: '💧', label: '图片水印', disabled: true },
-  { id: 'pdf-convert', icon: '📄', label: 'PDF转换', disabled: true },
-  { id: 'video-convert', icon: '🎬', label: '视频转换', disabled: true },
+  // { id: 'image-compress', icon: '📦', label: '图片压缩', disabled: true },
+  // { id: 'image-resize', icon: '📐', label: '图片裁剪', disabled: true },
+  // { id: 'image-watermark', icon: '💧', label: '图片水印', disabled: true },
+  // { id: 'pdf-convert', icon: '📄', label: 'PDF转换', disabled: true },
+  // { id: 'video-convert', icon: '🎬', label: '视频转换', disabled: true },
 ];
 
 export default function ImageConverter() {
@@ -181,7 +181,7 @@ export default function ImageConverter() {
               justifyContent: 'center',
               fontSize: '1rem',
             }}>⚡</span>
-            转换工具箱
+            工具箱
           </h1>
         </div>
 
@@ -329,7 +329,7 @@ export default function ImageConverter() {
               拖放图片到这里，或点击选择文件
             </p>
             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem', margin: 0 }}>
-              支持 PNG, JPEG, WebP, GIF, BMP 等格式
+              支持 PNG, JPEG, WebP, GIF, BMP, AVIF 等格式
             </p>
           </div>
 
