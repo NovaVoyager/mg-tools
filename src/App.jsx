@@ -41,8 +41,29 @@ function App() {
         flex: 1,
         padding: '40px',
         overflowY: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
       }}>
-        {renderContent()}
+        <div style={{ flex: 1 }}>
+          {renderContent()}
+        </div>
+        <footer style={{
+          marginTop: '40px',
+          paddingTop: '24px',
+          paddingBottom: '24px',
+          borderTop: `1px solid ${colors.border}`,
+          textAlign: 'center',
+          transition: 'all 0.3s ease',
+        }}>
+          <span style={{
+            display: 'inline-block',
+            color: colors.textTertiary,
+            fontSize: '0.75rem',
+            lineHeight: '1',
+          }}>
+            Copyright © 2026 MG Tools · All rights reserved.
+          </span>
+        </footer>
       </main>
     </div>
   );

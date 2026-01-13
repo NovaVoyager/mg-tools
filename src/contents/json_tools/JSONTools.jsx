@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { JSONEditor as VanillaJSONEditor } from 'vanilla-jsoneditor';
+import { createJSONEditor } from 'vanilla-jsoneditor';
 import ReactJson from 'react-json-view';
 import 'vanilla-jsoneditor/themes/jse-theme-dark.css';
 import { useTheme } from '../../theme/ThemeContext';
@@ -36,10 +36,10 @@ export default function JSONTools() {
   // 初始化 vanilla-jsoneditor
   useEffect(() => {
     if (viewMode === 'editor' && containerRef.current && !editorRef.current) {
-      editorRef.current = new VanillaJSONEditor({
+      editorRef.current = createJSONEditor({
         target: containerRef.current,
         props: {
-          mode: 'tree',
+          mode: 'text',
           mainMenuBar: true,
           navigationBar: true,
           statusBar: true,
@@ -84,11 +84,6 @@ export default function JSONTools() {
       setIsValidJSON(true);
       setErrorMessage('');
       setInputText('');
-
-      // 如果在编辑器模式，更新编辑器内容
-      if (viewMode === 'editor' && editorRef.current) {
-        editorRef.current.set({ json: parsed });
-      }
     } catch (error) {
       setIsValidJSON(false);
       setErrorMessage('无效的 JSON 格式：' + error.message);
@@ -97,7 +92,6 @@ export default function JSONTools() {
 
   const handleClear = () => {
     setJsonData({});
-    setInputText('');
     setIsValidJSON(true);
     setErrorMessage('');
 
@@ -172,7 +166,6 @@ export default function JSONTools() {
         setJsonData(json);
         setIsValidJSON(true);
         setErrorMessage('');
-        setInputText('');
 
         if (viewMode === 'editor' && editorRef.current) {
           editorRef.current.set({ json });
@@ -184,24 +177,6 @@ export default function JSONTools() {
       }
     };
     reader.readAsText(file);
-  };
-
-  const handleFormat = () => {
-    if (viewMode === 'editor' && editorRef.current) {
-      try {
-        const content = editorRef.current.get();
-        if (content.json) {
-          editorRef.current.set({ json: content.json });
-          setIsValidJSON(true);
-          setErrorMessage('');
-        }
-      } catch (error) {
-        setIsValidJSON(false);
-        setErrorMessage(error.message);
-      }
-    } else if (inputText.trim()) {
-      handleLoadJSON();
-    }
   };
 
   // react-json-view 的回调
@@ -221,17 +196,19 @@ export default function JSONTools() {
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
       <header style={{ marginBottom: '30px' }}>
         <h2 style={{
-          color: '#fff',
+          color: colors.textPrimary,
           fontSize: '1.8rem',
           fontWeight: '600',
           margin: '0 0 8px 0',
+          transition: 'color 0.3s ease',
         }}>
           JSON 工具
         </h2>
         <p style={{
-          color: 'rgba(255,255,255,0.5)',
+          color: colors.textTertiary,
           fontSize: '1rem',
           margin: 0,
+          transition: 'color 0.3s ease',
         }}>
           JSON 格式化、校验、编辑、查看 - 支持专业编辑器和可视化查看器两种模式
         </p>
@@ -242,10 +219,11 @@ export default function JSONTools() {
         display: 'flex',
         gap: '12px',
         marginBottom: '20px',
-        background: 'rgba(255,255,255,0.03)',
+        background: colors.cardBg,
         borderRadius: '12px',
         padding: '8px',
-        border: '1px solid rgba(255,255,255,0.06)',
+        border: `1px solid ${colors.border}`,
+        transition: 'all 0.3s ease',
       }}>
         <button
           onClick={() => setViewMode('editor')}
@@ -258,9 +236,9 @@ export default function JSONTools() {
             fontSize: '0.95rem',
             fontWeight: '600',
             background: viewMode === 'editor'
-              ? 'linear-gradient(135deg, #6366f1, #8b5cf6)'
+              ? colors.gradientPrimary
               : 'transparent',
-            color: viewMode === 'editor' ? '#fff' : 'rgba(255,255,255,0.7)',
+            color: viewMode === 'editor' ? '#fff' : colors.textSecondary,
             transition: 'all 0.2s ease',
             display: 'flex',
             alignItems: 'center',
@@ -281,9 +259,9 @@ export default function JSONTools() {
             fontSize: '0.95rem',
             fontWeight: '600',
             background: viewMode === 'viewer'
-              ? 'linear-gradient(135deg, #6366f1, #8b5cf6)'
+              ? colors.gradientPrimary
               : 'transparent',
-            color: viewMode === 'viewer' ? '#fff' : 'rgba(255,255,255,0.7)',
+            color: viewMode === 'viewer' ? '#fff' : colors.textSecondary,
             transition: 'all 0.2s ease',
             display: 'flex',
             alignItems: 'center',
@@ -295,60 +273,6 @@ export default function JSONTools() {
         </button>
       </div>
 
-      {/* 输入区域 */}
-      <div style={{
-        background: 'rgba(255,255,255,0.03)',
-        borderRadius: '16px',
-        padding: '20px',
-        border: '1px solid rgba(255,255,255,0.06)',
-        marginBottom: '20px',
-      }}>
-        <label style={{
-          color: 'rgba(255,255,255,0.7)',
-          display: 'block',
-          marginBottom: '12px',
-          fontSize: '0.9rem',
-          fontWeight: '500',
-        }}>
-          输入或粘贴 JSON 文本
-        </label>
-        <textarea
-          value={inputText}
-          onChange={(e) => {
-            setInputText(e.target.value);
-            setIsValidJSON(true);
-            setErrorMessage('');
-          }}
-          placeholder='粘贴 JSON 文本到这里，例如：{"name": "example", "value": 123}'
-          style={{
-            width: '100%',
-            minHeight: '100px',
-            padding: '12px',
-            borderRadius: '8px',
-            border: '1px solid rgba(255,255,255,0.15)',
-            background: 'rgba(0,0,0,0.3)',
-            color: '#fff',
-            fontSize: '0.9rem',
-            fontFamily: 'monospace',
-            resize: 'vertical',
-            boxSizing: 'border-box',
-          }}
-        />
-        {!isValidJSON && (
-          <div style={{
-            marginTop: '10px',
-            padding: '10px',
-            borderRadius: '8px',
-            background: 'rgba(239, 68, 68, 0.1)',
-            border: '1px solid rgba(239, 68, 68, 0.3)',
-            color: '#ef4444',
-            fontSize: '0.85rem',
-          }}>
-            ⚠️ {errorMessage}
-          </div>
-        )}
-      </div>
-
       {/* 工具栏 */}
       <div style={{
         display: 'flex',
@@ -357,58 +281,16 @@ export default function JSONTools() {
         marginBottom: '20px',
       }}>
         <button
-          onClick={handleLoadJSON}
-          style={{
-            padding: '10px 20px',
-            borderRadius: '8px',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '0.9rem',
-            fontWeight: '500',
-            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-            color: '#fff',
-            transition: 'all 0.2s ease',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-          }}
-        >
-          ✨ 加载 JSON
-        </button>
-
-        {viewMode === 'editor' && (
-          <button
-            onClick={handleFormat}
-            style={{
-              padding: '10px 20px',
-              borderRadius: '8px',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '0.9rem',
-              fontWeight: '500',
-              background: 'linear-gradient(135deg, #10b981, #059669)',
-              color: '#fff',
-              transition: 'all 0.2s ease',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-            }}
-          >
-            💎 格式化
-          </button>
-        )}
-
-        <button
           onClick={handleCopy}
           style={{
             padding: '10px 20px',
             borderRadius: '8px',
-            border: '1px solid rgba(255,255,255,0.15)',
+            border: `1px solid ${colors.borderLight}`,
             cursor: 'pointer',
             fontSize: '0.9rem',
             fontWeight: '500',
-            background: 'rgba(255,255,255,0.03)',
-            color: 'rgba(255,255,255,0.7)',
+            background: colors.cardBg,
+            color: colors.textSecondary,
             transition: 'all 0.2s ease',
             display: 'flex',
             alignItems: 'center',
@@ -423,12 +305,12 @@ export default function JSONTools() {
           style={{
             padding: '10px 20px',
             borderRadius: '8px',
-            border: '1px solid rgba(255,255,255,0.15)',
+            border: `1px solid ${colors.borderLight}`,
             cursor: 'pointer',
             fontSize: '0.9rem',
             fontWeight: '500',
-            background: 'rgba(255,255,255,0.03)',
-            color: 'rgba(255,255,255,0.7)',
+            background: colors.cardBg,
+            color: colors.textSecondary,
             transition: 'all 0.2s ease',
             display: 'flex',
             alignItems: 'center',
@@ -441,12 +323,12 @@ export default function JSONTools() {
         <label style={{
           padding: '10px 20px',
           borderRadius: '8px',
-          border: '1px solid rgba(255,255,255,0.15)',
+          border: `1px solid ${colors.borderLight}`,
           cursor: 'pointer',
           fontSize: '0.9rem',
           fontWeight: '500',
-          background: 'rgba(255,255,255,0.03)',
-          color: 'rgba(255,255,255,0.7)',
+          background: colors.cardBg,
+          color: colors.textSecondary,
           transition: 'all 0.2s ease',
           display: 'flex',
           alignItems: 'center',
@@ -467,12 +349,12 @@ export default function JSONTools() {
           style={{
             padding: '10px 20px',
             borderRadius: '8px',
-            border: '1px solid rgba(255,255,255,0.15)',
+            border: `1px solid ${colors.borderLight}`,
             cursor: 'pointer',
             fontSize: '0.9rem',
             fontWeight: '500',
-            background: 'rgba(255,255,255,0.03)',
-            color: 'rgba(255,255,255,0.7)',
+            background: colors.cardBg,
+            color: colors.textSecondary,
             transition: 'all 0.2s ease',
             display: 'flex',
             alignItems: 'center',
@@ -485,10 +367,11 @@ export default function JSONTools() {
 
       {/* 编辑器/查看器容器 */}
       <div style={{
-        background: 'rgba(255,255,255,0.03)',
+        background: colors.cardBg,
         borderRadius: '16px',
         padding: '20px',
-        border: '1px solid rgba(255,255,255,0.06)',
+        border: `1px solid ${colors.border}`,
+        transition: 'all 0.3s ease',
       }}>
         {viewMode === 'editor' ? (
           <div
@@ -499,16 +382,92 @@ export default function JSONTools() {
             }}
           />
         ) : (
-          <div style={{
-            background: 'rgba(0,0,0,0.3)',
-            borderRadius: '12px',
-            padding: '20px',
-            maxHeight: '600px',
-            overflowY: 'auto',
-          }}>
-            <ReactJson
+          <div>
+            {/* 输入区域 */}
+            <div style={{
+              marginBottom: '20px',
+            }}>
+              <label style={{
+                color: colors.textSecondary,
+                display: 'block',
+                marginBottom: '12px',
+                fontSize: '0.9rem',
+                fontWeight: '500',
+                transition: 'color 0.3s ease',
+              }}>
+                输入或粘贴 JSON 文本
+              </label>
+              <textarea
+                value={inputText}
+                onChange={(e) => {
+                  setInputText(e.target.value);
+                  setIsValidJSON(true);
+                  setErrorMessage('');
+                }}
+                placeholder='粘贴 JSON 文本到这里，例如：{"name": "example", "value": 123}'
+                style={{
+                  width: '100%',
+                  minHeight: '120px',
+                  padding: '12px',
+                  borderRadius: '8px',
+                  border: `1px solid ${colors.borderLight}`,
+                  background: colors.inputBg,
+                  color: colors.textPrimary,
+                  fontSize: '0.9rem',
+                  fontFamily: 'monospace',
+                  resize: 'vertical',
+                  boxSizing: 'border-box',
+                  transition: 'all 0.3s ease',
+                }}
+              />
+              {!isValidJSON && (
+                <div style={{
+                  marginTop: '10px',
+                  padding: '10px',
+                  borderRadius: '8px',
+                  background: colors.errorBg,
+                  border: `1px solid ${colors.errorBorder}`,
+                  color: colors.error,
+                  fontSize: '0.85rem',
+                  transition: 'all 0.3s ease',
+                }}>
+                  ⚠️ {errorMessage}
+                </div>
+              )}
+              <button
+                onClick={handleLoadJSON}
+                style={{
+                  marginTop: '12px',
+                  padding: '10px 20px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem',
+                  fontWeight: '500',
+                  background: colors.gradientPrimary,
+                  color: '#fff',
+                  transition: 'all 0.2s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                ✨ 加载 JSON
+              </button>
+            </div>
+
+            {/* JSON 查看器 */}
+            <div style={{
+              background: colors.inputBg,
+              borderRadius: '12px',
+              padding: '20px',
+              maxHeight: '600px',
+              overflowY: 'auto',
+              transition: 'all 0.3s ease',
+            }}>
+              <ReactJson
               src={jsonData}
-              theme="monokai"
+              theme={isDark ? "monokai" : "rjv-default"}
               iconStyle="triangle"
               displayDataTypes={true}
               displayObjectSize={true}
@@ -525,6 +484,7 @@ export default function JSONTools() {
                 background: 'transparent',
               }}
             />
+            </div>
           </div>
         )}
       </div>
@@ -532,26 +492,29 @@ export default function JSONTools() {
       {/* 功能说明 */}
       <div style={{
         marginTop: '30px',
-        background: 'rgba(99, 102, 241, 0.1)',
+        background: colors.primaryBg,
         borderRadius: '12px',
         padding: '20px',
-        border: '1px solid rgba(99, 102, 241, 0.2)',
+        border: `1px solid ${colors.primaryBorder}`,
+        transition: 'all 0.3s ease',
       }}>
         <h3 style={{
-          color: '#a5b4fc',
+          color: colors.primaryLight,
           fontSize: '1rem',
           fontWeight: '600',
           margin: '0 0 12px 0',
+          transition: 'color 0.3s ease',
         }}>
           {viewMode === 'editor' ? '📝 专业编辑器功能' : '👁️ 可视化查看器功能'}
         </h3>
         {viewMode === 'editor' ? (
           <ul style={{
-            color: 'rgba(255,255,255,0.6)',
+            color: colors.textSecondary,
             fontSize: '0.85rem',
             lineHeight: '1.8',
             margin: 0,
             paddingLeft: '20px',
+            transition: 'color 0.3s ease',
           }}>
             <li>支持树形视图和代码视图切换</li>
             <li>自动校验 JSON 格式</li>
@@ -563,11 +526,12 @@ export default function JSONTools() {
           </ul>
         ) : (
           <ul style={{
-            color: 'rgba(255,255,255,0.6)',
+            color: colors.textSecondary,
             fontSize: '0.85rem',
             lineHeight: '1.8',
             margin: 0,
             paddingLeft: '20px',
+            transition: 'color 0.3s ease',
           }}>
             <li>美观的树形结构展示 JSON 数据</li>
             <li>点击节点前的三角形图标可折叠/展开</li>

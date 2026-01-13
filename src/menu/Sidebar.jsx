@@ -15,71 +15,74 @@ export default function Sidebar({ activeMenu, setActiveMenu }) {
       position: 'relative',
       transition: 'background 0.3s ease, border-color 0.3s ease',
     }}>
-      {/* 主题切换按钮 */}
-      <div style={{
-        padding: '0 20px 20px',
-        display: 'flex',
-        justifyContent: 'flex-end',
-      }}>
-        <button
-          onClick={toggleTheme}
-          title={isDark ? '切换到亮色主题' : '切换到暗色主题'}
-          style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '10px',
-            border: `1px solid ${colors.borderLight}`,
-            background: colors.cardBg,
-            color: colors.textSecondary,
-            cursor: 'pointer',
-            fontSize: '1.2rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = colors.cardBgHover;
-            e.currentTarget.style.borderColor = colors.primary;
-            e.currentTarget.style.color = colors.primary;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = colors.cardBg;
-            e.currentTarget.style.borderColor = colors.borderLight;
-            e.currentTarget.style.color = colors.textSecondary;
-          }}
-        >
-          {isDark ? '☀️' : '🌙'}
-        </button>
-      </div>
-
       <div style={{
         padding: '0 20px 30px',
         borderBottom: `1px solid ${colors.border}`,
         marginBottom: '20px',
       }}>
-        <h1 style={{
-          color: colors.textPrimary,
-          fontSize: '1.3rem',
-          fontWeight: '600',
-          margin: '0 0 16px 0',
+        {/* 标题和主题切换按钮 */}
+        <div style={{
           display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          transition: 'color 0.3s ease',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          marginBottom: '16px',
         }}>
-          <span style={{
-            background: colors.gradientPrimary,
-            borderRadius: '8px',
-            width: '32px',
-            height: '32px',
+          <h1 style={{
+            color: colors.textPrimary,
+            fontSize: '1.3rem',
+            fontWeight: '600',
+            margin: 0,
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '1rem',
-          }}>⚡</span>
-          工具箱
-        </h1>
+            gap: '10px',
+            transition: 'color 0.3s ease',
+          }}>
+            <span style={{
+              background: colors.gradientPrimary,
+              borderRadius: '8px',
+              width: '32px',
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1rem',
+            }}>⚡</span>
+            工具箱
+          </h1>
+
+          {/* 主题切换按钮 */}
+          <button
+            onClick={toggleTheme}
+            title={isDark ? '切换到亮色主题' : '切换到暗色主题'}
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '10px',
+              border: `1px solid ${colors.borderLight}`,
+              background: colors.cardBg,
+              color: colors.textSecondary,
+              cursor: 'pointer',
+              fontSize: '1.2rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.2s ease',
+              flexShrink: 0,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = colors.cardBgHover;
+              e.currentTarget.style.borderColor = colors.primary;
+              e.currentTarget.style.color = colors.primary;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = colors.cardBg;
+              e.currentTarget.style.borderColor = colors.borderLight;
+              e.currentTarget.style.color = colors.textSecondary;
+            }}
+          >
+            {isDark ? '☀️' : '🌙'}
+          </button>
+        </div>
         <div style={{
           background: colors.primaryBg,
           borderRadius: '8px',
