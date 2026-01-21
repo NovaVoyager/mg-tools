@@ -151,7 +151,7 @@ export default function ImageConverter() {
           margin: 0,
           transition: 'color 0.3s ease',
         }}>
-          支持 PNG, JPEG, WebP, GIF, BMP, AVIF 格式互转，可调节压缩质量
+          支持 PNG, JPEG, WebP, GIF, BMP, AVIF 格式转换，可调节压缩质量
         </p>
       </header>
 
