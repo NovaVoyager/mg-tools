@@ -5,6 +5,7 @@ import JSONTools from './contents/json_tools/JSONTools';
 import TimestampConverter from './contents/timestamp/TimestampConverter';
 import Base64Tool from './contents/base64/Base64Tool';
 import URLTool from './contents/url/URLTool';
+import Calculator from './contents/calculator/Calculator';
 import { useTheme } from './theme/ThemeContext';
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
         return <Base64Tool />;
       case 'url':
         return <URLTool />;
+      case 'calculator':
+        return <Calculator />;
       default:
         return <ImageConverter />;
     }

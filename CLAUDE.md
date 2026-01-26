@@ -4,9 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**mg-tools** is a client-side web application toolbox for media conversion. Built with React 19 and Vite 7, it currently features an image format converter with plans to expand to other media manipulation tools.
+**mg-tools** is a client-side web application toolbox providing multiple utilities. Built with React 19 and Vite 7, it includes:
+- Image format converter (PNG/JPEG/WebP)
+- JSON tools (editor/viewer)
+- Timestamp converter
+- Base64 encoder/decoder
+- URL encoder/decoder
+- Calculator with history
 
-All processing happens entirely in the browser using Canvas API - no server uploads or external services.
+All processing happens entirely in the browser - no server uploads or external services.
 
 ## Commands
 
@@ -22,55 +28,114 @@ npm run lint       # Run ESLint on all JS/JSX files
 
 ### Application Structure
 
-This is a single-page application with a sidebar navigation pattern:
+Single-page application with sidebar navigation:
 
-- **Main container** (`ImageConverter.jsx`): Contains both the sidebar menu and the main content area
-- **Sidebar menu**: Lists all available tools (only "图片格式转换" is active, others marked as "即将推出"/coming soon)
-- **Content area**: Renders the currently active tool
+```
+main.jsx
+  └─ ThemeProvider
+      └─ App.jsx
+          ├─ Sidebar (menu navigation)
+          └─ renderContent() (switch-case routing)
+              ├─ ImageConverter
+              ├─ JSONTools
+              ├─ TimestampConverter
+              ├─ Base64Tool
+              ├─ URLTool
+              ├─ Calculator
+              └─ ... (future tools)
+```
 
-The app is designed to grow with additional tools, but currently everything lives in `ImageConverter.jsx`.
+**Key files:**
+- `src/App.jsx` - Root component with routing logic
+- `src/menu/menuConfig.js` - Menu items configuration array
+- `src/menu/Sidebar.jsx` - Navigation sidebar component
+- `src/theme/ThemeContext.jsx` - Theme system (dark/light modes)
 
-### Image Conversion Flow
+### Adding New Tools
 
-1. **File input**: Drag-drop or file picker → validates image type
-2. **Preview display**: Reads file via FileReader → displays as base64 Data URL
-3. **Format selection**: User chooses PNG/JPEG/WebP + quality (for lossy formats)
-4. **Conversion**:
-   - Draws image to canvas
-   - For JPEG: fills white background first (no transparency support)
-   - Exports via `canvas.toDataURL()` as base64 Data URL
-5. **Download**: Creates temporary `<a>` element with Data URL and triggers download
+Follow this three-step pattern (used consistently across all existing tools):
 
-**Important**: Uses Data URLs instead of Blob URLs to avoid CSP (Content Security Policy) restrictions. File size is calculated from base64 string length.
+**Step 1:** Create tool component in `src/contents/[tool-name]/[ToolName].jsx`
+```jsx
+import { useTheme } from '../../theme/ThemeContext';
+
+export default function MyTool() {
+  const { colors } = useTheme();
+  // ... component logic
+  return (
+    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      {/* Tool UI */}
+    </div>
+  );
+}
+```
+
+**Step 2:** Add menu item to `src/menu/menuConfig.js`
+```javascript
+{ id: 'my-tool', icon: '🔧', label: '我的工具', active: true }
+```
+
+**Step 3:** Update routing in `src/App.jsx`
+```javascript
+import MyTool from './contents/my-tool/MyTool';
+
+// In renderContent() switch statement:
+case 'my-tool':
+  return <MyTool />;
+```
 
 ### Component Organization
 
-- `src/main.jsx` - React app entry point with StrictMode
-- `src/App.jsx` - Root component that renders `ImageConverter`
-- `src/ImageConverter.jsx` - Entire UI and business logic (754 lines)
-  - Menu system with feature flags (lines 3-10)
-  - File handling with drag-drop support
-  - Canvas-based image conversion
-  - Preview comparison (original vs converted)
-  - All styling is inline (CSS-in-JS pattern)
+```
+src/
+├── contents/           # Tool components (one folder per tool)
+│   ├── image_converter/
+│   ├── json_tools/
+│   ├── timestamp/
+│   ├── base64/
+│   ├── url/
+│   └── calculator/
+├── menu/
+│   ├── menuConfig.js   # Menu items array
+│   └── Sidebar.jsx     # Navigation component
+├── theme/
+│   └── ThemeContext.jsx  # Theme system
+├── App.jsx             # Main container + routing
+└── main.jsx            # Entry point
+```
 
 ### State Management
 
-All state is local React state using `useState` hooks in `ImageConverter.jsx`:
-- `activeMenu` - currently selected tool
-- `image/preview` - original image data
-- `outputFormat/quality` - conversion settings
-- `convertedBlob/convertedPreview` - result data
-- `originalInfo/convertedSize` - file metadata
-- `isDragging/isConverting` - UI states
+- No global state management library (Redux, Zustand, etc.)
+- Each tool manages its own local state via `useState`
+- Theme state managed via Context API (`ThemeContext`)
+- Persistent data uses localStorage directly (e.g., calculator history, theme preference)
 
 ### Styling Approach
 
-The app uses **inline styles exclusively** with a dark theme:
-- CSS-in-JS pattern (style objects in JSX)
-- Gradient backgrounds (purple/indigo color scheme)
-- Custom CSS animations via `<style>` tag for spinner and range slider
-- No external CSS files except `index.css` and `App.css`
+**CSS-in-JS exclusively** - all styles are inline style objects:
+```jsx
+<button style={{
+  background: colors.gradientPrimary,
+  borderRadius: '10px',
+  transition: 'all 0.2s ease',
+  // ... more styles
+}}>
+```
+
+**Theme System:**
+- Use `const { colors, isDark, toggleTheme } = useTheme()` in every component
+- Colors object provides semantic tokens (textPrimary, cardBg, border, etc.)
+- Supports dark (default) and light themes
+- Theme preference stored in localStorage
+
+**Common patterns:**
+- Container: `maxWidth: '1200px', margin: '0 auto'`
+- Cards: `background: colors.cardBg, borderRadius: '16px', border: 1px solid colors.border`
+- Transitions: `transition: 'all 0.3s ease'` for theme switching
+- Animations: Inline `<style>` tags with `@keyframes` (see Base64Tool for Toast example)
+
+**No CSS files** except base resets in `index.css`
 
 ## ESLint Configuration
 
@@ -79,16 +144,48 @@ Uses ESLint 9 flat config (`eslint.config.js`):
 - Ignores `dist/` directory
 - Custom rule: allows unused vars starting with uppercase (common React pattern)
 
-## Browser APIs Used
+## Key Implementation Patterns
 
-- **Canvas API**: Image format conversion and rendering
+### Browser APIs Used
+- **Canvas API**: Image format conversion (see `ImageConverter.jsx`)
 - **FileReader API**: Reading uploaded files as Data URLs
 - **Drag and Drop API**: File upload via drag-drop
-- **Blob/Data URL**: File download mechanism
+- **localStorage**: Persisting theme preference and calculator history
+- **navigator.clipboard**: Copy-to-clipboard functionality (with Toast feedback)
 
-## Language Notes
+### Security Considerations
+- **Calculator**: Uses `Function` constructor instead of `eval()` for expression evaluation (safer, but still validates/sanitizes input)
+- **Image conversion**: Uses Data URLs instead of Blob URLs to avoid CSP restrictions
+- **No server communication**: All processing happens client-side
 
-The UI is in **Chinese** (Simplified). When adding features:
-- Menu labels use Chinese with emoji icons
-- Button text and messages are Chinese
-- Keep naming consistent with existing pattern
+### Common UI Patterns
+- **Toast notifications**: Fixed position, auto-dismiss after 2s, slideIn animation (see `Base64Tool.jsx:395-426`)
+- **Error handling**: Display errors in colored alert boxes with emoji icons
+- **Loading states**: Use inline state (`isConverting`, `isProcessing`) with loading indicators
+- **Hover effects**: Implement via `onMouseEnter`/`onMouseLeave` inline handlers
+
+### Dependencies
+- `dayjs`: Date/time formatting (TimestampConverter)
+- `vanilla-jsoneditor`: JSON editor component (JSONTools)
+- `react-json-view`: JSON viewer component (JSONTools)
+
+No build-time dependencies beyond Vite and ESLint.
+
+## Language and Conventions
+
+**UI Language:** Simplified Chinese (简体中文)
+- Menu labels: Chinese + emoji (e.g., `🔢 计算器`)
+- All user-facing text: Chinese
+- Code comments: Chinese acceptable but English preferred
+- Variable/function names: English
+
+**Naming Conventions:**
+- Components: PascalCase (e.g., `Calculator.jsx`)
+- Tool IDs: kebab-case (e.g., `'calculator'`, `'image-format'`)
+- localStorage keys: Prefix with `'mg-tools-'` (e.g., `'mg-tools-calculator-history'`)
+
+**Code Style:**
+- Use functional components with hooks (no class components)
+- Prefer `const` over `let`
+- Use arrow functions for event handlers
+- ESLint config allows unused vars starting with uppercase (React pattern)
