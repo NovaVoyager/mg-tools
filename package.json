@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "dayjs": "^1.11.19",
+    "node-sql-parser": "^5.4.0",
+    "prismjs": "^1.30.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-json-view": "^1.21.3",

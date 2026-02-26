@@ -6,6 +6,7 @@ import TimestampConverter from './contents/timestamp/TimestampConverter';
 import Base64Tool from './contents/base64/Base64Tool';
 import URLTool from './contents/url/URLTool';
 import Calculator from './contents/calculator/Calculator';
+import SQLConverter from './contents/sql_converter/SQLConverter';
 import { useTheme } from './theme/ThemeContext';
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
         return <URLTool />;
       case 'calculator':
         return <Calculator />;
+      case 'sql-converter':
+        return <SQLConverter />;
       default:
         return <ImageConverter />;
     }
