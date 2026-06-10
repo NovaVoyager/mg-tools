@@ -6,6 +6,9 @@ import TimestampConverter from './contents/timestamp/TimestampConverter';
 import Base64Tool from './contents/base64/Base64Tool';
 import URLTool from './contents/url/URLTool';
 import Calculator from './contents/calculator/Calculator';
+import BaseConverter from './contents/base_converter/BaseConverter';
+import PowerOfTwo from './contents/power_of_two/PowerOfTwo';
+import KeyGenerator from './contents/key_generator/KeyGenerator';
 import SQLConverter from './contents/sql_converter/SQLConverter';
 import { useTheme } from './theme/ThemeContext';
 
@@ -27,6 +30,12 @@ function App() {
         return <URLTool />;
       case 'calculator':
         return <Calculator />;
+      case 'base-converter':
+        return <BaseConverter />;
+      case 'power-of-two':
+        return <PowerOfTwo />;
+      case 'key-generator':
+        return <KeyGenerator />;
       case 'sql-converter':
         return <SQLConverter />;
       default:

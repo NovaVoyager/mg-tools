@@ -1,53 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useTheme } from '../../theme/ThemeContext';
 
 export default function Base64Tool() {
   const { colors } = useTheme();
   const [inputText, setInputText] = useState('');
-  const [outputText, setOutputText] = useState('');
   const [mode, setMode] = useState('encode'); // 'encode' or 'decode'
-  const [error, setError] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  const handleEncode = () => {
-    try {
-      setError('');
-      const encoded = btoa(unescape(encodeURIComponent(inputText)));
-      setOutputText(encoded);
-    } catch (err) {
-      setError('编码失败：' + err.message);
-      setOutputText('');
-    }
-  };
-
-  const handleDecode = () => {
-    try {
-      setError('');
-      const decoded = decodeURIComponent(escape(atob(inputText)));
-      setOutputText(decoded);
-    } catch (err) {
-      setError('解码失败：输入的不是有效的 Base64 字符串');
-      setOutputText('');
-    }
-  };
-
-  const handleConvert = () => {
+  // 输入或模式变化时自动转换（派生状态）
+  const { outputText, error } = useMemo(() => {
     if (!inputText.trim()) {
-      setError('请输入内容');
-      return;
+      return { outputText: '', error: '' };
     }
-    if (mode === 'encode') {
-      handleEncode();
-    } else {
-      handleDecode();
+    try {
+      const result = mode === 'encode'
+        ? btoa(unescape(encodeURIComponent(inputText)))
+        : decodeURIComponent(escape(atob(inputText.trim())));
+      return { outputText: result, error: '' };
+    } catch (err) {
+      return {
+        outputText: '',
+        error: mode === 'encode'
+          ? '编码失败：' + err.message
+          : '解码失败：输入的不是有效的 Base64 字符串',
+      };
     }
-  };
+  }, [inputText, mode]);
 
   const handleClear = () => {
     setInputText('');
-    setOutputText('');
-    setError('');
   };
 
   // 显示 toast 提示
@@ -64,16 +46,14 @@ export default function Base64Tool() {
     try {
       await navigator.clipboard.writeText(outputText);
       showCopyToast('✓ 已复制到剪贴板');
-    } catch (err) {
+    } catch {
       showCopyToast('✗ 复制失败');
     }
   };
 
   const handleSwap = () => {
-    setInputText(outputText);
-    setOutputText('');
     setMode(mode === 'encode' ? 'decode' : 'encode');
-    setError('');
+    setInputText(outputText);
   };
 
   return (
@@ -94,7 +74,7 @@ export default function Base64Tool() {
           margin: 0,
           transition: 'color 0.3s ease',
         }}>
-          支持文本与 Base64 字符串的相互转换
+          支持文本与 Base64 字符串的相互转换，输入即时转换
         </p>
       </header>
 
@@ -105,11 +85,7 @@ export default function Base64Tool() {
         marginBottom: '24px',
       }}>
         <button
-          onClick={() => {
-            setMode('encode');
-            setError('');
-            setOutputText('');
-          }}
+          onClick={() => setMode('encode')}
           style={{
             padding: '12px 24px',
             borderRadius: '10px',
@@ -125,11 +101,7 @@ export default function Base64Tool() {
           🔒 编码（文本 → Base64）
         </button>
         <button
-          onClick={() => {
-            setMode('decode');
-            setError('');
-            setOutputText('');
-          }}
+          onClick={() => setMode('decode')}
           style={{
             padding: '12px 24px',
             borderRadius: '10px',
@@ -197,10 +169,7 @@ export default function Base64Tool() {
           </div>
           <textarea
             value={inputText}
-            onChange={(e) => {
-              setInputText(e.target.value);
-              setError('');
-            }}
+            onChange={(e) => setInputText(e.target.value)}
             placeholder={mode === 'encode' ? '请输入要编码的文本...' : '请输入要解码的 Base64 字符串...'}
             style={{
               width: '100%',
@@ -337,23 +306,6 @@ export default function Base64Tool() {
         gap: '12px',
         flexWrap: 'wrap',
       }}>
-        <button
-          onClick={handleConvert}
-          style={{
-            padding: '14px 32px',
-            borderRadius: '10px',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '0.95rem',
-            fontWeight: '600',
-            background: colors.gradientPrimary,
-            color: '#fff',
-            transition: 'all 0.2s ease',
-          }}
-        >
-          {mode === 'encode' ? '🔒 编码' : '🔓 解码'}
-        </button>
-
         {outputText && (
           <button
             onClick={handleCopy}

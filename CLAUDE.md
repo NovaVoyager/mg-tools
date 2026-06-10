@@ -94,7 +94,8 @@ src/
 │   ├── timestamp/
 │   ├── base64/
 │   ├── url/
-│   └── calculator/
+│   ├── calculator/
+│   └── sql_converter/  # built but menu entry commented out in menuConfig.js
 ├── menu/
 │   ├── menuConfig.js   # Menu items array
 │   └── Sidebar.jsx     # Navigation component
